@@ -1,0 +1,179 @@
+---
+title: STAT 5443, HW1
+author: Ariel Mundo
+date: 9/15/2020
+output:
+    #df_print: paged
+  prettydoc::html_pretty:
+    theme: cayman
+    #highlight: github
+---
+
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+library(prettydoc)
+```
+***
+ Disclaimer: This is the first time I try using RMarkdown, please excuse any typing errors.
+
+
+#### PROBLEM 1
+
+```{r, PROBLEM 1}
+x<-c(3, 4, 12, 19, 23, 48, 50, 61, 63, 78)
+primes<-c(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 
+          43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97)     
+j<-rep(0,length(x)) #variable to keep track of index of non prime numbers in x
+for (i in 1:length(x)){
+  p<-x[i]==primes #logical comparison of each element in x to prime numbers
+  if(all(p==FALSE)){
+                    j[i]<-i} #if all the elements on p are false, the number in x[i]
+                              #is a non-prime integer, keep track of it using j
+}
+print(x[j]) #print the non-prime numbers
+
+
+```
+***
+#### PROBLEM 2.a
+
+According to the definition $f(n)=O(g(n))$ if the limit equals a constant $k>0$. Taking the limit of:
+$\lim_{x \to \infty}\frac {x^3} {x^4}$ using L'Hopital rule renders: \[ \lim_{x \to \infty}\frac{3}{4x} \neq 0\], and therefore $x^{3}$ is not $\Theta(x)^{4}$
+
+PROBLEM 2.b
+
+Rewriting the expression: \[\lim_{n \to \infty}(\frac{\log n} {n^{1/k}})^k\], and using L'Hopital rule: \[\lim_{n \to \infty}\frac {k}{n^{1/k}}=0\] and therefore $(\log(n))^{k}=O(n)$
+
+***
+PROBLEM 3.a
+```{r, PROBLEM 3.a}
+###selection sort####
+selection_sort<-function(A){
+  r<-length(A)
+  for (i in 1:(r-1)){
+    index<-i #tracks smallest number in the original array, updated accordingly 
+    for (j in (i+1):r){
+      if (A[j]<A[index]){
+        index<-j #updated if something smaller is found
+      }
+    }
+  if (index!=i){ #if updated, swap the values
+    temp<-A[i] #move the number
+    A[i]<-A[index] #put in the first position
+    A[index]<-temp #put the following number in the next position
+      }
+    }
+  return(A)
+}
+```
+
+PROBLEM 3.b ELAPSED TIMES FOR EACH ALGORITHM
+```{r, PROBLEM 3.b, echo=FALSE, results='hide'}
+#####merge sort####
+MergeSort <- function(x){
+  if(length(x) == 1) {
+    res <- x
+  }else{
+    # split x in 2 and call mergesort on both parts
+    i <- floor(length(x)/2)
+    s1 <- c(MergeSort(x[1:i]), Inf)
+    s2 <- c(MergeSort(x[-(1:i)]), Inf)
+    res <- rep(NA_real_, length(x))
+    # merge the responses in ascending order
+    i1 <- i2 <- 1
+    for (i3 in 1:length(res)){
+      if (s1[i1] <= s2[i2]) {
+        res[i3] <- s1[i1]
+        i1 <- i1 + 1
+      } else {
+        res[i3] <- s2[i2]
+        i2 <- i2 + 1
+      }
+    }      
+  } 
+  return(res)
+}
+p<-rnorm(1000)
+ptm<-proc.time()
+selection_sort(p)
+t1<-proc.time()-ptm
+ptm<-proc.time()
+MergeSort(p)
+t2<-proc.time()-ptm
+```
+
+```{r}
+print(t1[['elapsed']]) ## selection sort
+print(t2[['elapsed']]) ## merge sort
+```
+
+
+
+```{r, PROBLEM 3.c}
+reps <- 100
+time1 <- time2 <- rep (0,reps )
+for (i in 1: reps ){
+  # obtain the cpu time from the i - th random sample
+  # and save the results as , say , t1 and t2
+  y = rnorm (1000) # generated sample of size 1000
+  ptm<- proc.time()
+  MergeSort (y) # merge sort algorithm
+  t11 <- proc.time()-ptm
+  time1[i]<- t11[['elapsed']]
+  ptm <- proc.time()
+  selection_sort(y) # Selection sort algorithm
+  t22 <-proc.time()-ptm
+  time2[i]<- t22[['elapsed']]
+}
+
+mean1<-mean(time1)
+var1<-var(time1)
+print(paste('Merge sort mean time:',mean1))
+print(paste('Merge sort variance:',var1))
+mean2<-mean(time2)
+var2<-var(time2)
+print(paste('Selection sort mean time:',mean2))
+print(paste('Selection sort variance:',var2))
+ratio<-mean2/mean1
+print(paste('Ratio of selection sort time to merge sort time (mean)',ratio))
+```
+#### PLOTTING THE RESULTS
+
+```{r}
+plot(time1)
+plot(time2)
+```
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+#### *The values do agree, for a single call to each function there is no significant difference, but upon recursive calling, mergesort is about 4 times faster than selection sort.*
+</div>
+
+***
+#### BONUS PROBLEM
+
+BONUS PROBLEM a
+
+From the problem statement, this corresponds to:
+
+$5T(n/2)+O(n^{1})$ where $a=5, b=2, d=1$ therefore $d<\log_{2}(5)$ and according to the Master Theorem:
+\[T(n)=O(n^{\log_{2}5})\]
+
+BONUS PROBLEM b
+
+From the problem statement: $T(n)=2T(n-1)+k$, but this form has no correspondence in the Master Theorem. However, this corresponds to the "Towers of Hanoi" problem. In this problem, for 1 disk, $T(n)=1$. Using $k=1$ for two,three, four and five disks:
+
+\[T(2)=2*1+1=3\]
+\[T(3)=2*3+1=7\]
+\[T(4)=2*7+1=15\]
+\[T(5)=2*15+1=31\]
+
+By intuition, this corresponds to $2^{n}-1$. Since in big $O$ notation the constants are dropped, the time complexity for this algorithm would be: \[T(n)=O(2^{n})\]
+
+
+BONUS PROBLEM c
+
+From the problem statement: $T(n)=9T(n/3)+O(n^{2})$ where $a=9, b=3, d=2$. From the Master Theorem: \[2=\log_{3}9\] 
+Therefore: \[T(n)=O(n^{2} \log n)\]
