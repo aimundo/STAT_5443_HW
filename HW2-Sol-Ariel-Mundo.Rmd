@@ -37,13 +37,10 @@ f<-1-cos(y)
 hist(x,freq = F)
 lines(y,f,col="red")
 ```
+#### PROBLEM 2
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+$p(x)=\lambda x^{-\lambda -1}$ therefore:
+\[\int_0^{x} w^{-\lambda -1}~dw\] which yields:
+\[F(x)=-x^{-\lambda}\]
+Using the inversion method:
+\[F^{-1}=\sqrt[-\lambda]{-u}\]
