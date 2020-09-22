@@ -27,7 +27,7 @@ and using the inverse CDF Transform:
 \[F^{-1}(u)=\arccos(1-u)\]
 
 
-```{r PROBLEM 1}
+```{r, PROBLEM 1}
 
 set.seed(123)
 u<-runif(n=10000)
@@ -44,3 +44,15 @@ $p(x)=\lambda x^{-\lambda -1}$ therefore:
 \[F(x)=-x^{-\lambda}\]
 Using the inversion method:
 \[F^{-1}=\sqrt[-\lambda]{-u}\]
+
+```{r, PROBLEM 2}
+lambda_fun<-function(lambda,n=1){
+u<-runif(n)
+x<-(-((u)^(-1/lambda)))
+return(x)
+}
+y=seq(1,10,0.5)
+fy=(4*y^(-4-1))
+hist(lambda_fun(4,100),freq=F)
+plot(y,fy,col="red")
+```
