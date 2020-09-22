@@ -15,14 +15,27 @@ output:
 library(prettydoc)
 ```
 
-## R Markdown
+#### PROBLEM 1
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Since $p(x)=\sin(x)$ the $CDF$ is calculated as:
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+\[\int_0^{x} \sin w~dw\] which yields:
+\[F(x)=1-\cos(x)\] 
+and using the inverse CDF Transform:
 
-```{r cars}
-summary(cars)
+\[u=1-\cos(F^{-1}(u))\] 
+\[F^{-1}(u)=\arccos(1-u)\]
+
+
+```{r PROBLEM 1}
+
+set.seed(123)
+u<-runif(n=10000)
+x<-acos(1-u)
+y<-seq(0,pi/2,0.1)
+f<-1-cos(y)
+hist(x,freq = F)
+lines(y,f,col="red")
 ```
 
 ## Including Plots
