@@ -34,16 +34,62 @@ and using the inverse CDF Transform:
 set.seed(123)
 u<-runif(n=10000)
 x<-acos(1-u)
-y<-seq(0,pi/2,0.1)
+y<-seq(from=0,to=pi/2,0.01)
 f<-sin(y)
 hist(x,freq = F)
 lines(y,f,col="red")
 ```
-##### PARTB: REJECTION SAMPLING METHOD
+##### PART B: REJECTION SAMPLING METHOD
+```{r}
+
+#http://www.ericfrazerlock.com/Rejection_Sampling_Rcode1.r
+#http://ericfrazerlock.com/Rejection_Sampling.pdf
+#https://datasciencechalktalk.com/2019/09/22/understanding-rejection-sampling-method/
+sine<-sin(y)
+plot(y,sine,type="l") #plotting the desired density
+
+s<-function(x) sin(x) #target function
+g<-function(x) x/x #proposal function, uniform(0,1) in vectorial form
+random_g<-function(n) runif(n,0,1) #generator from U(0,1)
+M=1.5 #constant
+n=1000 #size of the sample we want to draw from f(x)
+
+acceptance=function(f,M,g,random_g,n){
+    
+    n_accept=0
+    final_sample=rep(NA,n) #empty list of size of sample
+    while (n_accept<n){
+        x=random_g(4) #we can take always the same position as each generation will return a different number in             that  position
+        u=runif(1,0,1)
+        if (u*M*g(x)<=s(x)){
+            n_accept=n_accept+1
+            final_sample[n_accept]=x
+        }
+        
+    }
+    final_sample
+    }
+    vals = acceptance(s,M,g,random_g,n)
+hist(vals, breaks=30, freq=FALSE, main="Sample Density")
+    
+    
+    
+    
+}
+
+fun_rej<-function(c) {
+    for (i in 1:158){
+        x<-runif(1,0,1)
+        u<-runif(1,0,1)
+        if (c*u<=sine)
+    return(sine)
+    }
+    
+}
 
 
 
-
+```
 ***
 
 
@@ -64,7 +110,7 @@ u<-runif(n)
 x<-1/((1-u)^(1/lambda))
 return(x)
 }
-y=seq(1,6,0.5)
+y=seq(1,6,0.2)
 fy=(lambda*y^(-lambda-1))
 hist(lambda_fun(lambda,100),freq=F)
 lines(y,fy,col="red")
