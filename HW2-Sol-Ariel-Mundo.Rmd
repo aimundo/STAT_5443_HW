@@ -17,6 +17,8 @@ library(prettydoc)
 
 #### PROBLEM 1
 
+##### PART A
+
 Since $p(x)=\sin(x)$ the $CDF$ is calculated as:
 
 \[\int_0^{x} \sin w~dw\] which yields:
@@ -33,26 +35,37 @@ set.seed(123)
 u<-runif(n=10000)
 x<-acos(1-u)
 y<-seq(0,pi/2,0.1)
-f<-1-cos(y)
+f<-sin(y)
 hist(x,freq = F)
 lines(y,f,col="red")
 ```
+##### PARTB: REJECTION SAMPLING METHOD
+
+
+
+
+***
+
+
+
 #### PROBLEM 2
 
 $p(x)=\lambda x^{-\lambda -1}$ therefore:
-\[\int_0^{x} w^{-\lambda -1}~dw\] which yields:
-\[F(x)=-x^{-\lambda}\]
+\[\int_1^{x} w^{-\lambda -1}~dw\] which yields:
+\[F(x)=1-x^{-\lambda}\]
 Using the inversion method:
-\[F^{-1}=\sqrt[-\lambda]{-u}\]
+\[F^{-1}=\sqrt[-\lambda]{u-1}\]
 
 ```{r, PROBLEM 2}
+lambda<-4
 lambda_fun<-function(lambda,n=1){
 u<-runif(n)
-x<-(-((u)^(-1/lambda)))
+#x=-exp(log(u)/-lambda)
+x<-1/((1-u)^(1/lambda))
 return(x)
 }
-y=seq(1,10,0.5)
-fy=(4*y^(-4-1))
-hist(lambda_fun(4,100),freq=F)
-plot(y,fy,col="red")
+y=seq(1,6,0.5)
+fy=(lambda*y^(-lambda-1))
+hist(lambda_fun(lambda,100),freq=F)
+lines(y,fy,col="red")
 ```
