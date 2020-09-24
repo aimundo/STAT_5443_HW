@@ -89,3 +89,16 @@ fy=(lambda*y^(-lambda-1))
 hist(lambda_fun(lambda,100),freq=F)
 lines(y,fy,col="red")
 ```
+
+#### PROBLEM 3
+
+Function is $f(x)\propto\exp (-x^{4}/12)$
+Plotting the function:
+```{r, PROBLEM 3}
+curve(exp(-(x^4)/12),0,2)
+```
+STEP 1
+under the transformation $x=y^{1/n}$, where $dx=\frac{1}{n}y^{\frac{1}{n}-1}$ the transformed density becomes:
+\[f(y)=\int_0^{\infty}{\rm e}^{-ky}{y}^{\frac{1}{n}-1}dy\]
+Therefore, , $dx=\frac{1}{n}y^{\frac{1}{n}-1} dy$ and:
+\[\Gamma(\alpha)=\int_0^{\infty}(\lambda y)^{\alpha-1}{\rm e}^{-x}dx\]
