@@ -98,7 +98,11 @@ Plotting the function:
 curve(exp(-(x^4)/12),0,2)
 ```
 STEP 1
-under the transformation $x=y^{1/n}$, where $dx=\frac{1}{n}y^{\frac{1}{n}-1}$ the transformed density becomes:
-\[f(y)=\int_0^{\infty}{\rm e}^{-ky}{y}^{\frac{1}{n}-1}dy\]
-Therefore, , $dx=\frac{1}{n}y^{\frac{1}{n}-1} dy$ and:
-\[\Gamma(\alpha)=\int_0^{\infty}(\lambda y)^{\alpha-1}{\rm e}^{-x}dx\]
+under the transformation $x=y^{1/n}$, where $dx=\frac{1}{n}y^{\frac{1}{n}-1} dy$, and substituting accordingly, the transformed density becomes:
+\[f(y)=\frac{1}{n}\int_0^{\infty}{\rm e}^{-ky}{y}^{\frac{1}{n}-1}dy\]
+Comparing with the density of Gamma, $\alpha=\frac{1}{n}$ and $\lambda=k$
+
+```{r}
+
+
+````
