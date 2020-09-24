@@ -45,6 +45,7 @@ lines(y,f,col="red")
 #http://www.ericfrazerlock.com/Rejection_Sampling_Rcode1.r
 #http://ericfrazerlock.com/Rejection_Sampling.pdf
 #https://datasciencechalktalk.com/2019/09/22/understanding-rejection-sampling-method/
+#https://www.di.fc.ul.pt/~jpn/r/PRML/chapter11.html
 rejection <- function(f, M, g, rg,n) {
   naccepts <- 0
   result.sample <- rep(NA, n)
@@ -53,7 +54,7 @@ rejection <- function(f, M, g, rg,n) {
     y <- rg(1)
     u <- runif(1)
 
-    if ( u <= f(y) / (M*g )) {
+    if ( u <= f(y) / (M*g(y) )) {
       naccepts <- naccepts + 1
       result.sample[naccepts] = y
     }
@@ -62,11 +63,10 @@ rejection <- function(f, M, g, rg,n) {
   result.sample
 }
 
-f <- function(x) sin(x)
-#g <- function(x) 1
-g <- runif(1)
-rg <- runif
-M <- 1.5 #upper bound on f (via basic calculus)
+f  <- function(x) sin(x)     # pdf of Beta(2,2), maximum density is 1.5
+g  <- function(x) x/x           # g(x) = 1 but in vectorized version
+rg <- function(n) runif(n,0,pi/2)  # uniform, in this case
+M  <- 2
 
 result <- rejection(f, M, g,rg, 10000)
 
