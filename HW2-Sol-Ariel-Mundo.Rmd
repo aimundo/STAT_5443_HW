@@ -45,49 +45,34 @@ lines(y,f,col="red")
 #http://www.ericfrazerlock.com/Rejection_Sampling_Rcode1.r
 #http://ericfrazerlock.com/Rejection_Sampling.pdf
 #https://datasciencechalktalk.com/2019/09/22/understanding-rejection-sampling-method/
-sine<-sin(y)
-plot(y,sine,type="l") #plotting the desired density
+rejection <- function(f, M, g, rg,n) {
+  naccepts <- 0
+  result.sample <- rep(NA, n)
 
-s<-function(x) sin(x) #target function
-g<-function(x) x/x #proposal function, uniform(0,1) in vectorial form
-random_g<-function(n) runif(n,0,1) #generator from U(0,1)
-M=1.5 #constant
-n=1000 #size of the sample we want to draw from f(x)
+  while (naccepts < n) {
+    y <- rg(1)
+    u <- runif(1)
 
-acceptance=function(f,M,g,random_g,n){
-    
-    n_accept=0
-    final_sample=rep(NA,n) #empty list of size of sample
-    while (n_accept<n){
-        x=random_g(4) #we can take always the same position as each generation will return a different number in             that  position
-        u=runif(1,0,1)
-        if (u*M*g(x)<=s(x)){
-            n_accept=n_accept+1
-            final_sample[n_accept]=x
-        }
-        
+    if ( u <= f(y) / (M*g )) {
+      naccepts <- naccepts + 1
+      result.sample[naccepts] = y
     }
-    final_sample
-    }
-    vals = acceptance(s,M,g,random_g,n)
-hist(vals, breaks=30, freq=FALSE, main="Sample Density")
-    
-    
-    
-    
+  }
+
+  result.sample
 }
 
-fun_rej<-function(c) {
-    for (i in 1:158){
-        x<-runif(1,0,1)
-        u<-runif(1,0,1)
-        if (c*u<=sine)
-    return(sine)
-    }
-    
-}
+f <- function(x) sin(x)
+#g <- function(x) 1
+g <- runif(1)
+rg <- runif
+M <- 1.5 #upper bound on f (via basic calculus)
 
+result <- rejection(f, M, g,rg, 10000)
 
+print(length(result[result <= 0.8])/10000)
+hist(result,freq=FALSE)
+lines(y,sin(y),type="l")
 
 ```
 ***
