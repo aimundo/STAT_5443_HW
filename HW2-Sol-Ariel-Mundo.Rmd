@@ -39,6 +39,7 @@ f<-sin(y)
 hist(x,freq = F)
 lines(y,f,col="red")
 ```
+
 ##### PART B: REJECTION SAMPLING METHOD
 ```{r}
 M<-2 #scaling
@@ -50,9 +51,8 @@ while (accept<n){
     u<-runif(1,0,1)  #another random number between 0 and 1 to compare
     if (M*u<=sin(y)){  #if the value of M*u is less or equal than the target distribution, then
         
-        accept<-accept+1 #if the value falls under the desired pdf, increase the counter by 1
+        accept<-accept+1 #increase the counter by 1 to be able to continue storing in final_sample
         final_sample[accept]<-y #store the random number that was evaluated in f(x)  
-        
     }
 }
 p<-seq(from=0,to=pi/2,0.01)
@@ -66,8 +66,6 @@ lines(p,w,col="red")
 
 ***
 
-
-
 #### PROBLEM 2
 
 $p(x)=\lambda x^{-\lambda -1}$ therefore:
@@ -80,7 +78,6 @@ Using the inversion method:
 lambda<-4
 lambda_fun<-function(lambda,n=1){
 u<-runif(n)
-#x=-exp(log(u)/-lambda)
 x<-1/((1-u)^(1/lambda))
 return(x)
 }
@@ -90,19 +87,30 @@ hist(lambda_fun(lambda,100),freq=F)
 lines(y,fy,col="red")
 ```
 
+***
+
 #### PROBLEM 3
 
-Function is $f(x)\propto\exp (-x^{4}/12)$
-Plotting the function:
-```{r, PROBLEM 3}
-curve(exp(-(x^4)/12),0,2)
-```
-STEP 1
+Function is \[f(x)\propto\exp (-x^{4}/12)\]
+
+##### STEP 1
+
 under the transformation $x=y^{1/n}$, where $dx=\frac{1}{n}y^{\frac{1}{n}-1} dy$, and substituting accordingly, the transformed density becomes:
-\[f(y)=\frac{1}{n}\int_0^{\infty}{\rm e}^{-ky}{y}^{\frac{1}{n}-1}dy\]
+\[f(y)=\frac{1}{n}\int_0^{\infty}{\rm e}^{-ky}{y}^{\frac{1}{n}-1}dy\] 
+Where the constant $\frac{1}{n}$ can be omitted because of proportionality.
+
 Comparing with the density of Gamma, $\alpha=\frac{1}{n}$ and $\lambda=k$
 
 ```{r}
-
-
+alpha=1/4
+lambda=1/12
+n<-1E5
+y<-rep(NA,n)
+y<-rgamma(n,shape=alpha, rate=lambda)
+z<-y^(alpha)
+#the following lines are taken from the in-class exercise slides
+hist(z, breaks = 30, freq = F, col = rgb(0.75,0.4,0.1,0.5)) # z is your sample
+target <- function(x){exp(-lambda*x^(1/alpha))/
+integrate(function(x) exp(-lambda*x^(1/alpha)),0,Inf)$value}
+curve(target,lwd=2,add=T)
 ````
