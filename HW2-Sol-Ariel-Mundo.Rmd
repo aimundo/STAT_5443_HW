@@ -87,6 +87,10 @@ hist(lambda_fun(lambda,100),freq=F)
 lines(y,fy,col="red")
 ```
 
+#https://www.math.arizona.edu/~jwatkins/M_moments.pdf
+#https://www.econometrics-with-r.org/2-1-random-variables-and-probability-distributions.html#expected-value-mean-and-variance
+#https://math.stackexchange.com/questions/243843/derive-the-expected-value-for-a-pareto-distribution
+
 ***
 
 #### PROBLEM 3
