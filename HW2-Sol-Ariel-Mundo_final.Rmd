@@ -1,14 +1,25 @@
 ---
 title: STAT 5443, HW2
 author: Ariel Mundo
-date: 9/15/2020
+date: 9/29/2020
 output:
-    #df_print: paged
-  prettydoc::html_pretty:
+    prettydoc::html_pretty:
     theme: cayman
-    fontsize: 6pt
-    #highlight: github
+    #css: styles.css
 ---
+<style type="text/css">
+
+p {
+   font-size: 10px;
+}
+code.r{
+  font-size: 10px;
+}
+pre {
+  font-size: 10px
+}
+</style>
+
 
 
 ```{r setup, include=FALSE}
@@ -101,16 +112,12 @@ Using R to verify this result:
 lambda<-3
 delta<-2.5
 f<-function(x){x^delta*lambda*x^(-lambda-1)}
-integrate(f,1,Inf)
+val<-integrate(f,1,Inf)
+return(val)
 
 
 
 ```
-
-#https://www.math.arizona.edu/~jwatkins/M_moments.pdf
-#https://www.econometrics-with-r.org/2-1-random-variables-and-probability-distributions.html#expected-value-mean-and-variance
-#https://math.stackexchange.com/questions/243843/derive-the-expected-value-for-a-pareto-distribution
-
 ***
 
 #### PROBLEM 3

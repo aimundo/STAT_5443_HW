@@ -145,12 +145,24 @@ a.sourceLine {
 <section class="page-header">
 <h1 class="title toc-ignore project-name">STAT 5443, HW2</h1>
 <h4 class="author project-author">Ariel Mundo</h4>
-<h4 class="date project-date">9/15/2020</h4>
+<h4 class="date project-date">9/29/2020</h4>
 </section>
 
 
 
 <section class="main-content">
+<style type="text/css">
+
+p {
+   font-size: 10px;
+}
+code.r{
+  font-size: 10px;
+}
+pre {
+  font-size: 10px
+}
+</style>
 <div id="problem-1" class="section level4">
 <h4>PROBLEM 1</h4>
 <div id="part-a" class="section level5">
@@ -215,9 +227,9 @@ a.sourceLine {
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>lambda&lt;-<span class="dv">3</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>delta&lt;-<span class="fl">2.5</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>f&lt;-<span class="cf">function</span>(x){x<span class="op">^</span>delta<span class="op">*</span>lambda<span class="op">*</span>x<span class="op">^</span>(<span class="op">-</span>lambda<span class="dv">-1</span>)}</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="kw">integrate</span>(f,<span class="dv">1</span>,<span class="ot">Inf</span>)</span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4"></a>val&lt;-<span class="kw">integrate</span>(f,<span class="dv">1</span>,<span class="ot">Inf</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">return</span>(val)</span></code></pre></div>
 <pre><code>## 6 with absolute error &lt; 2e-14</code></pre>
-<p>#<a href="https://www.math.arizona.edu/~jwatkins/M_moments.pdf" class="uri">https://www.math.arizona.edu/~jwatkins/M_moments.pdf</a> #<a href="https://www.econometrics-with-r.org/2-1-random-variables-and-probability-distributions.html#expected-value-mean-and-variance" class="uri">https://www.econometrics-with-r.org/2-1-random-variables-and-probability-distributions.html#expected-value-mean-and-variance</a> #<a href="https://math.stackexchange.com/questions/243843/derive-the-expected-value-for-a-pareto-distribution" class="uri">https://math.stackexchange.com/questions/243843/derive-the-expected-value-for-a-pareto-distribution</a></p>
 <hr />
 </div>
 </div>
