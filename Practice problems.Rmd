@@ -9,6 +9,23 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+## Problem 1
+
+This would be the case of Monte Carlo integration by the sample-mean method.
+This would involve to generate a large number of samples from the uniform distribution in the interval $ (-\pi,\pi)$
+
+```{r PROBLEM 1}
+a=-pi
+b=pi
+n=1E5
+x=runif(n,min=a,max=b)
+f<-(exp(x)-exp(-x))/2
+int<-(b-a)*mean(f)
+
+
+```
+
+
 ## Problem 3
 
 Devise a recursive algorithm to find the sum of the first n odd positive integers.
