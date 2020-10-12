@@ -1,0 +1,70 @@
+---
+title: STAT 5443, Midterm
+author: Ariel Mundo
+date: 10/12/2020
+output:
+    prettydoc::html_pretty:
+    theme: cayman
+    #css: styles.css
+---
+<style type="text/css">
+
+p {
+   font-size: 12px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+
+
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+library(prettydoc)
+```
+ ### PROBLEM 1
+ 
+ #### Part A
+For this problem, rejection sampling can be used.
+```{r, PROBLEM 1}
+M<-6 #scaling
+n<-1E5 #number of iterations
+final_sample<-rep(NA,n)
+accept<-0
+while (accept<n){
+    y<-runif(1,0,1) #get one random number between 0 and pi/2 as the value to input in f(x)
+    u<-runif(1,0,1)  #another random number between 0 and 1 to compare
+    if (M*u<=(1+sqrt(y)*exp(-(y/2+sqrt(y))))/(2*sqrt(y))){  #if the value of M*u is less or equal than the target distribution, then
+        
+        accept<-accept+1 #increase the counter by 1 to be able to continue storing in final_sample
+        final_sample[accept]<-y #store the random number that was evaluated in f(x)  
+    }
+}
+p<-seq(from=0,to=1,0.01)
+w<-(1+sqrt(p)*exp(-(p/2+sqrt(p))))/(2*sqrt(p))
+
+hist(final_sample,freq=F)
+lines(p,w,col="red")
+
+```
+#### Part B
+ 
+ Using Monte Carlo integration:
+ 
+```{r}
+   n=1E5
+f<-function(x){
+        log(x)*((1+sqrt(x))/(2*sqrt(x)))*exp(-(x/2+sqrt(x))) #function
+}
+y=runif(n) #samples from U
+val=f(y)
+Expectation<-mean(val) #calculate the expectation
+Std_err=sqrt(var(val)/n) #calculate standard error
+CI=1.96*Std_err #confidence interval corresponding to 95%
+print(paste('Expectation:',Expectation,'Confidence interval:',Expectation-CI,Expectation+CI))
+```
+    Edelman's answer was -1.68788 and while the simple Monte Carlo does not match the value exactly, it provides a confidence interval that does contain the true value.
