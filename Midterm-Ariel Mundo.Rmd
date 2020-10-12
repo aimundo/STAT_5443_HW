@@ -56,7 +56,8 @@ lines(p,w,col="red")
  Using Monte Carlo integration:
  
 ```{r}
-   n=1E5
+set.seed(123) #set seed
+n=1E5
 f<-function(x){
         log(x)*((1+sqrt(x))/(2*sqrt(x)))*exp(-(x/2+sqrt(x))) #function
 }
