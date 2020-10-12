@@ -1,0 +1,71 @@
+---
+title: "Practice problems"
+author: "Ariel Mundo"
+date: "9/30/2020"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Problem 1
+
+This would be the case of Monte Carlo integration by the sample-mean method.
+This would involve to generate a large number of samples from the uniform distribution in the interval $ (-\pi,\pi)$
+
+```{r PROBLEM 1}
+a=-pi
+b=pi
+n=1E5
+x=runif(n,min=a,max=b)
+f<-(exp(x)-exp(-x))/2
+int<-(b-a)*mean(f)
+
+
+```
+
+
+## Problem 3
+
+Devise a recursive algorithm to find the sum of the first n odd positive integers.
+Using the odd number theorem, which states that:
+
+$$\sum_{i=1}^{n}(2i-1)=n^{2}$$
+Pseudocode:
+
+read number $n$
+
+calculate $n*n$
+
+print result
+
+There is a single call to the algorithm even if the number is large, therefore the time is constant and $O(1)$
+```{r}
+n=10
+j=rep(0,n)
+j[1]<-1
+for (i in 1:n-1){ #create array of odd numbers
+j[i+1]<-2*i+1
+}
+total<-sum(j)
+print(total)
+```
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+
