@@ -56,16 +56,32 @@ lines(p,w,col="red")
  Using Monte Carlo integration:
  
 ```{r}
-set.seed(123) #set seed
-n=1E5
+set.seed(1245)
+n=1E4
 f<-function(x){
         log(x)*((1+sqrt(x))/(2*sqrt(x)))*exp(-(x/2+sqrt(x))) #function
 }
-y=runif(n) #samples from U
-val=f(y)
+val=f(runif(n))
 Expectation<-mean(val) #calculate the expectation
 Std_err=sqrt(var(val)/n) #calculate standard error
 CI=1.96*Std_err #confidence interval corresponding to 95%
-print(paste('Expectation:',Expectation,'Confidence interval:',Expectation-CI,Expectation+CI))
+print(paste('Expectation:',Expectation))
+print(paste('95% Confidence interval:[',Expectation-CI,",",Expectation+CI,']'))
 ```
     Edelman's answer was -1.68788 and while the simple Monte Carlo does not match the value exactly, it provides a confidence interval that does contain the true value.
+
+
+#### PROBLEM 3
+
+```{r}
+test<-function(n){
+  if (n>1){
+    print('still going')
+    test(n/2)
+    test(n/2)
+  }
+  
+}
+
+
+```
