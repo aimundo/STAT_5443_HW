@@ -72,16 +72,19 @@ print(paste('95% Confidence interval:[',Expectation-CI,",",Expectation+CI,']'))
 
 
 #### PROBLEM 3
-
+The algorithm will correspond to the following in R:
 ```{r}
 test<-function(n){
   if (n>1){
     print('still going')
-    test(n/2)
+   test(n/2)
     test(n/2)
   }
-  
+ 
 }
-
-
 ```
+The first comparison (if) will print the text once. Next, the function is recursively called twice by dividing n/2, and will print the text each time it is called until succesive divisions of  n/2 result in a value <1. This is done two times in each ocassion as the recursion happens twice. Therefore:
+$T(n)=2T(\frac{n}{2})+1$, where $a=2,b=2,d=0$
+According to the Master Theorem, as in this case $d<\log_b(a)$, this results in:
+$$O(n^{\log_22})=n $$
+Therefore, the algorithm will print $\Theta(n)= n$ lines.
