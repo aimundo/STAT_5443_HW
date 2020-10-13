@@ -26,9 +26,9 @@ pre {
 #knitr::opts_chunk$set(echo = TRUE)
 library(prettydoc)
 ```
- ### PROBLEM 1
+### PROBLEM 1
  
- #### Part A
+#### Part A
 For this problem, rejection sampling can be used.
 ```{r, PROBLEM 1}
 M<-6 #scaling
@@ -68,23 +68,56 @@ CI=1.96*Std_err #confidence interval corresponding to 95%
 print(paste('Expectation:',Expectation))
 print(paste('95% Confidence interval:[',Expectation-CI,",",Expectation+CI,']'))
 ```
-    Edelman's answer was -1.68788 and while the simple Monte Carlo does not match the value exactly, it provides a confidence interval that does contain the true value.
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">   
+    
+*Edelman's answer was -1.68788 and while the simple Monte Carlo does not match the value exactly, it provides a confidence interval that does contain the true value.*
+</div>
 
+#### PROBLEM 2
+
+The problem states that the first random number generated was $U=0.632$ and the first candidate draw (from Cauchy) was $X=1.36$. The condition to accept the value is given by:
+
+
+  If $U<\mathcal{N}(U,0,1)/M/Cauchy(U,0,2)$ 
+                    then accept the candidate. 
+Evaluating in R:
+
+```{r}
+candidate=1.36 
+M=1.52
+print(dnorm(candidate,0,1)/M/dcauchy(candidate, location=0, scale = 2))
+```
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+*Therefore, 0.632<0.9564 and the candidate is accepted.*
+</div>
 
 #### PROBLEM 3
 The algorithm will correspond to the following in R:
 ```{r}
 test<-function(n){
-  if (n>1){
-    print('still going')
-   test(n/2)
+  if (n>1){ 
+    print('still going')#prints text once always as long as n>1
+   test(n/2) #succesively splits n in two and repeats the printing as long as n>1
     test(n/2)
   }
  
 }
 ```
-The first comparison (if) will print the text once. Next, the function is recursively called twice by dividing n/2, and will print the text each time it is called until succesive divisions of  n/2 result in a value <1. This is done two times in each ocassion as the recursion happens twice. Therefore:
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+*The first comparison (if) will print the text once. Next, the function is recursively called twice by dividing n/2, and will print the text each time it is called until succesive divisions of  n/2 result in a value <1. This is done two times in each ocassion as the recursion happens twice*. 
+*Therefore:*
 $T(n)=2T(\frac{n}{2})+1$, where $a=2,b=2,d=0$
-According to the Master Theorem, as in this case $d<\log_b(a)$, this results in:
+*According to the Master Theorem, as in this case $d<\log_b(a)$, this results in:*
 $$O(n^{\log_22})=n $$
-Therefore, the algorithm will print $\Theta(n)= n$ lines.
+
+*Therefore, the algorithm will print $\Theta(n)= n$ lines.*
+</div>
