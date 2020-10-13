@@ -31,21 +31,21 @@ library(prettydoc)
 #### Part A
 For this problem, rejection sampling can be used.
 ```{r, PROBLEM 1}
-M<-6 #scaling
+M<-5 #scaling
 n<-1E5 #number of iterations
 final_sample<-rep(NA,n)
 accept<-0
 while (accept<n){
     y<-runif(1,0,1) #get one random number between 0 and pi/2 as the value to input in f(x)
     u<-runif(1,0,1)  #another random number between 0 and 1 to compare
-    if (M*u<=(1+sqrt(y)*exp(-(y/2+sqrt(y))))/(2*sqrt(y))){  #if the value of M*u is less or equal than the target distribution, then
+    if (M*u<=((1+sqrt(y))/(2*sqrt(y)))*exp(-(y/2+sqrt(y)))){  #if the value of M*u is less or equal than the target distribution, then
         
         accept<-accept+1 #increase the counter by 1 to be able to continue storing in final_sample
         final_sample[accept]<-y #store the random number that was evaluated in f(x)  
     }
 }
 p<-seq(from=0,to=1,0.01)
-w<-(1+sqrt(p)*exp(-(p/2+sqrt(p))))/(2*sqrt(p))
+w<-((1+sqrt(p))/(2*sqrt(p)))*exp(-(p/2+sqrt(p)))
 
 hist(final_sample,freq=F)
 lines(p,w,col="red")
