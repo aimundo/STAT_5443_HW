@@ -30,8 +30,15 @@ library(prettydoc)
  
 #### Part A
 For this problem, rejection sampling can be used.
+
+
 ```{r, PROBLEM 1}
-M<-5 #scaling
+curve(((1+sqrt(x))/(2*sqrt(x)))*exp(-(x/2+sqrt(x))),from=0, to=8) #plotting the function to determine appropiate envelope
+curve(8*dnorm(x,0,2),add=TRUE,col="red")
+```
+
+```{r}
+M<-10 #scaling
 n<-1E5 #number of iterations
 final_sample<-rep(NA,n)
 accept<-0
