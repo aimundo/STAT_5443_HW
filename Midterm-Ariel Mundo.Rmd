@@ -10,13 +10,17 @@ output:
 <style type="text/css">
 
 p {
-   font-size: 12px;
+   font-size: 14px;
 }
 code.r{
   font-size: 12px;
 }
 pre {
-  font-size: 12px
+  font-size: 12px;
+}
+
+ul {
+  font-size:12 px;
 }
 </style>
 
@@ -29,13 +33,19 @@ library(prettydoc)
 ### PROBLEM 1
  
 #### Part A
-For this problem, rejection sampling can be used.
+
+For this problem, a number of things make this function in particular challenging:
+
++ 1) Plotting the function it can be seen that it goes to $\infty$ as $y \rightarrow 0$. This causes a problem when finding the appropriate scaling for the envelope, because this is different than the other functions we have analyzed in class. 
++ 2) To determine the scaling factor, the method employs the maximization of the ratio $f(x)/g(x)$ where $f(x)$ is the function of interest and $g(x)$ the proposal distribution. In other words if $h(x)=\frac{f(x)}{g(x)}$ the optimal value for the envelope is determined at $h'(x)=0$. 
++ 3) But because in this case the function behaves asymptotically, even if using $Unif$, the optimal value for the envelope seems that cannot be determined using the method described previously. 
 
 
 ```{r, PROBLEM 1}
-curve(((1+sqrt(x))/(2*sqrt(x)))*exp(-(x/2+sqrt(x))),from=0, to=8) #plotting the function to determine appropiate envelope
-curve(8*dnorm(x,0,2),add=TRUE,col="red")
+curve(((1+sqrt(x))/(2*sqrt(x)))*exp(-(x/2+sqrt(x))),from=0, to=1) #plotting the function to determine appropiate envelope
 ```
+
++ That said, it seems that using a number above 5 the scaling using Rejection sampling and $Unif$ as the proposal distribution renders a histogram close to the original function.
 
 ```{r}
 M<-10 #scaling
@@ -58,29 +68,7 @@ hist(final_sample,freq=F)
 lines(p,w,col="red")
 ```
 
-```{r}
-#another option
-M<-5 #scaling
-n<-1E5 #number of iterations
-final_sample<-rep(NA,n)
-accept<-0
-while (accept<n){
-    y<-runif(1,0,1) #get one random number between 0 and pi/2 as the value to input in f(x)
-    u<-rexp(1,1)  #another random number between 0 and 1 to compare
-    if (y<((1+sqrt(y))/(2*sqrt(y)))*exp(-(y/2+sqrt(y)))/M/dexp(1,1)){  #if the value of M*u is less or equal than the target distribution, then
-        
-        accept<-accept+1 #increase the counter by 1 to be able to continue storing in final_sample
-        final_sample[accept]<-u #store the random number that was evaluated in f(x)  
-    }
-}
-p<-seq(from=0,to=8,0.01)
-w<-((1+sqrt(p))/(2*sqrt(p)))*exp(-(p/2+sqrt(p)))
 
-hist(final_sample,freq=F)
-lines(p,w,col="red")
-
-
-```
 #### Part B
  
  Using Monte Carlo integration:
@@ -106,6 +94,7 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 *Edelman's answer was -1.68788 and while the simple Monte Carlo does not match the value exactly, it provides a confidence interval that does contain the true value.*
 </div>
 
+***
 #### PROBLEM 2
 
 The problem states that the first random number generated was $U=0.632$ and the first candidate draw (from Cauchy) was $X=1.36$. The condition to accept the value is given by:
@@ -127,13 +116,15 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 *Therefore, 0.632<0.9564 and the candidate is accepted.*
 </div>
 
+***
+
 #### PROBLEM 3
 The algorithm will correspond to the following in R:
 ```{r}
 test<-function(n){
   if (n>1){ 
     print('still going')#prints text once always as long as n>1
-   test(n/2) #succesively splits n in two and repeats the printing as long as n>1
+   test(n/2) #succesive splits n in two and repeats the printing as long as n>1
     test(n/2)
   }
  
