@@ -37,7 +37,9 @@ library(prettydoc)
 For this problem, a number of things make this function in particular challenging:
 
 + 1) Plotting the function it can be seen that it goes to $\infty$ as $y \rightarrow 0$. This causes a problem when finding the appropriate scaling for the envelope, because this is different than the other functions we have analyzed in class. 
+
 + 2) To determine the scaling factor, the method employs the maximization of the ratio $f(x)/g(x)$ where $f(x)$ is the function of interest and $g(x)$ the proposal distribution. In other words if $h(x)=\frac{f(x)}{g(x)}$ the optimal value for the envelope is determined at $h'(x)=0$. 
+
 + 3) But because in this case the function behaves asymptotically, even if using $Unif$, the optimal value for the envelope seems that cannot be determined using the method described previously. 
 
 
