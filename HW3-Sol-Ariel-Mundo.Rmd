@@ -1,0 +1,53 @@
+---
+title: STAT 5443, HW3
+author: Ariel Mundo
+date:"`r Sys.Date()`"
+output:
+    prettydoc::html_pretty:
+    theme: cayman
+    #css: styles.css
+---
+<style type="text/css">
+
+p {
+   font-size: 12px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+
+
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+library(prettydoc)
+```
+
+## PROBLEM 1
+### GIBBS SAMPLER       
+```{r}
+rm(list = ls())
+binomial_beta_gibbs<- function(theta_init, s_init, rho, niter){
+  theta = matrix(0,2,niter)
+  theta[1,] = theta_init
+  for(i in 2:niter){
+    theta[1,i] = rnorm(1,y[1]+rho*(theta[2,(i-1)]-y[2]),1-rho^2)
+    theta[2,i] = rnorm(1,y[2]+rho*(theta[1,i]-y[1]),1-rho^2)
+  }
+  return(theta)
+}
+
+y = c(-1,1)
+theta_init = c(0,0)
+niter = 500
+rho = 0.8
+
+theta <- binorm_gibbs(theta_init,y,rho,niter)
+
+plot(t(theta),type="l")
+plot(t(theta),type="p")
+```
