@@ -66,6 +66,7 @@ print(paste('posterior median of theta:',median(theta), 'MLE estimate',s_1/n))
  *The estimated posterior mean of* $\theta$ *is indeed to the maximum likelihood estimate of s/n .*
 </div>
 http://www.stat.cmu.edu/~brian/463-663/week10/Chapter%2004.pdf
+https://bookdown.org/rdpeng/advstatcomp/gibbs-sampler.html
 
 
 ***
