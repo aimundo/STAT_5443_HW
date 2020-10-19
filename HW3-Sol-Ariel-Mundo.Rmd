@@ -1,7 +1,7 @@
 ---
 title: STAT 5443, HW3
 author: Ariel Mundo
-date:"`r Sys.Date()`"
+date: "`r Sys.Date()`"
 output:
     prettydoc::html_pretty:
     theme: cayman
@@ -10,13 +10,13 @@ output:
 <style type="text/css">
 
 p {
-   font-size: 12px;
+   font-size: 14px;
 }
 code.r{
-  font-size: 12px;
+  font-size: 14px;
 }
 pre {
-  font-size: 12px
+  font-size: 14px
 }
 </style>
 
@@ -29,25 +29,47 @@ library(prettydoc)
 
 ## PROBLEM 1
 ### GIBBS SAMPLER       
-```{r}
+```{r, GIBBS SAMPLER}
 rm(list = ls())
-binomial_beta_gibbs<- function(theta_init, s_init, rho, niter){
-  theta = matrix(0,2,niter)
-  theta[1,] = theta_init
+
+#binomial_beta_gibbs<- function(theta_init, s_init, niter){
+alpha=2
+beta_o=6.4
+n=74
+s_1=16
+niter=1000
+theta_init=s_1/n
+s_init=s_1/n
+  #theta = matrix(0,1,niter)
+  theta=rep(NA,niter)
+  #s=matrix(0,1,niter)
+  s=rep(NA,niter)
+  theta[1] = theta_init
+  s[1]=s_init
   for(i in 2:niter){
-    theta[1,i] = rnorm(1,y[1]+rho*(theta[2,(i-1)]-y[2]),1-rho^2)
-    theta[2,i] = rnorm(1,y[2]+rho*(theta[1,i]-y[1]),1-rho^2)
+    s[i] = rbinom(1,size=n,prob=theta[i-1])
+    theta[i] = rbeta(1,alpha+s[i],beta_o+n-s[i])
   }
-  return(theta)
-}
+  #return(theta)
+#}
 
-y = c(-1,1)
-theta_init = c(0,0)
-niter = 500
-rho = 0.8
+#n=74
+#s=16
+#theta <- binomial_beta_gibbs(theta_init=n/s,s_init=n/s,niter=1000)
 
-theta <- binorm_gibbs(theta_init,y,rho,niter)
-
-plot(t(theta),type="l")
-plot(t(theta),type="p")
+plot(theta,type="l", main='Traceplot for theta')
+plot(s,type="l", main='Traceplot for s')
+hist(s,freq=FALSE, main='Histogram for s')
+print(paste('posterior median of theta:',median(theta), 'MLE estimate',s_1/n))
 ```
+<div class = "blue">
+ *The estimated posterior mean of* $\theta$ *is indeed to the maximum likelihood estimate of s/n .*
+</div>
+http://www.stat.cmu.edu/~brian/463-663/week10/Chapter%2004.pdf
+
+
+***
+
+### PROBLEM 2
+
+
