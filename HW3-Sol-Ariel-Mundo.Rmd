@@ -89,13 +89,14 @@ s_init=s_1/n
   pmf$vals<-pmf$freq/niter
  return(cbind(median(s),median(theta)))
 }
-v<-seq(0,10,0.1)
+#v<-seq(0,10,0.1)
+v<-runif(10)
 test<-matrix(NA,2,length(v))
 for (j in 1:length(v)){
 test[,j]<-binomial_beta_gibbs(v[j],v[j],1000)
 }
-plot(test[2,], main='median s from variable initial values') #plotting the median values of all iterations
-plot(test[1,], main='median theta from variable initial values') #plotting the median values of all iterations
+plot(test[2,], type='l', main='median s from variable initial values') #plotting the median values of all iterations
+plot(test[1,], type='l', main='median theta from variable initial values') #plotting the median values of all iterations
 
 ```
 
