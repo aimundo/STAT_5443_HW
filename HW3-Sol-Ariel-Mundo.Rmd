@@ -28,11 +28,13 @@ library(prettydoc)
 ```
 
 ## PROBLEM 1
-### GIBBS SAMPLER       
-```{r, GIBBS SAMPLER}
-rm(list = ls())
+### GIBBS SAMPLER
 
-#binomial_beta_gibbs<- function(theta_init, s_init, niter){
+This section contains parts 1-4 from PROBLEM 1.
+```{r, GIBBS SAMPLER}
+library(plyr)
+rm(list = ls())
+set.seed(123)
 alpha=2
 beta_o=6.4
 n=74
@@ -40,9 +42,7 @@ s_1=16
 niter=1000
 theta_init=s_1/n
 s_init=s_1/n
-  #theta = matrix(0,1,niter)
   theta=rep(NA,niter)
-  #s=matrix(0,1,niter)
   s=rep(NA,niter)
   theta[1] = theta_init
   s[1]=s_init
@@ -50,15 +50,12 @@ s_init=s_1/n
     s[i] = rbinom(1,size=n,prob=theta[i-1])
     theta[i] = rbeta(1,alpha+s[i],beta_o+n-s[i])
   }
-  #return(theta)
-#}
-
-#n=74
-#s=16
-#theta <- binomial_beta_gibbs(theta_init=n/s,s_init=n/s,niter=1000)
-
-plot(theta,type="l", main='Traceplot for theta')
-plot(s,type="l", main='Traceplot for s')
+  pmf<-count(s)
+  pmf$vals<-pmf$freq/niter
+  
+plot(theta,type="l", main='Traceplot for theta',xlab='iterations')
+plot(s,type="l", main='Traceplot for s',xlab='iterations')
+plot(x=pmf$x,y=pmf$vals, main='approximate pmf')
 hist(s,freq=FALSE, main='Histogram for s')
 print(paste('posterior median of theta:',median(theta), 'MLE estimate',s_1/n))
 ```
@@ -68,6 +65,39 @@ print(paste('posterior median of theta:',median(theta), 'MLE estimate',s_1/n))
 http://www.stat.cmu.edu/~brian/463-663/week10/Chapter%2004.pdf
 https://bookdown.org/rdpeng/advstatcomp/gibbs-sampler.html
 
+### PART 5 OF PROBLEM 1
+
+This section measures the sensitivity of the posterior median to the choice of initial values. For this part, the previous Gibbs sampler will be transformed in a function, and the initial ratio $s/n$ will be randomized and the median $s$ and $\theta$ will be plotted for all iterations.
+
+```{r, PROBLEM 1 PART 5}
+
+binomial_beta_gibbs<-function(theta_init,s_init,iterations){
+alpha=2
+beta_o=6.4
+n=74
+  theta_init=s_1/n
+s_init=s_1/n
+  theta=rep(NA,iterations)
+  s=rep(NA,iterations)
+  theta[1] = theta_init
+  s[1]=s_init
+  for(i in 2:iterations){
+    s[i] = rbinom(1,size=n,prob=theta[i-1])
+    theta[i] = rbeta(1,alpha+s[i],beta_o+n-s[i])
+  }
+  pmf<-count(s)
+  pmf$vals<-pmf$freq/niter
+ return(cbind(median(s),median(theta)))
+}
+v<-seq(0,10,0.1)
+test<-matrix(NA,2,length(v))
+for (j in 1:length(v)){
+test[,j]<-binomial_beta_gibbs(v[j],v[j],1000)
+}
+plot(test[2,], main='median s from variable initial values') #plotting the median values of all iterations
+plot(test[1,], main='median theta from variable initial values') #plotting the median values of all iterations
+
+```
 
 ***
 
