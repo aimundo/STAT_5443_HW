@@ -1,0 +1,327 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={STAT 5443, HW3},
+  pdfauthor={Ariel Mundo},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{STAT 5443, HW3}
+\author{Ariel Mundo}
+\date{2020-10-23}
+
+\begin{document}
+\maketitle
+
+\hypertarget{problem-1}{%
+\subsection{PROBLEM 1}\label{problem-1}}
+
+\hypertarget{gibbs-sampler}{%
+\subsubsection{GIBBS SAMPLER}\label{gibbs-sampler}}
+
+This section contains parts 1-4 from PROBLEM 1.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(plyr)}
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{())}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{alpha=}\DecValTok{2}
+\NormalTok{beta_o=}\FloatTok{6.4}
+\NormalTok{n=}\DecValTok{74}
+\NormalTok{s_}\DecValTok{1}\NormalTok{=}\DecValTok{16}
+\NormalTok{niter=}\DecValTok{1000}
+\NormalTok{theta_init=s_}\DecValTok{1}\OperatorTok{/}\NormalTok{n}
+\NormalTok{s_init=s_}\DecValTok{1}\OperatorTok{/}\NormalTok{n}
+\NormalTok{  theta=}\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{,niter)}
+\NormalTok{  s=}\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{,niter)}
+\NormalTok{  theta[}\DecValTok{1}\NormalTok{] =}\StringTok{ }\NormalTok{theta_init}
+\NormalTok{  s[}\DecValTok{1}\NormalTok{]=s_init}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{niter)\{}
+\NormalTok{    s[i] =}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DataTypeTok{size=}\NormalTok{n,}\DataTypeTok{prob=}\NormalTok{theta[i}\DecValTok{-1}\NormalTok{])}
+\NormalTok{    theta[i] =}\StringTok{ }\KeywordTok{rbeta}\NormalTok{(}\DecValTok{1}\NormalTok{,alpha}\OperatorTok{+}\NormalTok{s[i],beta_o}\OperatorTok{+}\NormalTok{n}\OperatorTok{-}\NormalTok{s[i])}
+\NormalTok{  \}}
+\NormalTok{  pmf<-}\KeywordTok{count}\NormalTok{(s)}
+\NormalTok{  pmf}\OperatorTok{$}\NormalTok{vals<-pmf}\OperatorTok{$}\NormalTok{freq}\OperatorTok{/}\NormalTok{niter}
+  
+\KeywordTok{plot}\NormalTok{(theta,}\DataTypeTok{type=}\StringTok{"l"}\NormalTok{, }\DataTypeTok{main=}\StringTok{'Traceplot for theta'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'iterations'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW3-Sol-Ariel-Mundo_files/figure-latex/GIBBS SAMPLER-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(s,}\DataTypeTok{type=}\StringTok{"l"}\NormalTok{, }\DataTypeTok{main=}\StringTok{'Traceplot for s'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'iterations'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW3-Sol-Ariel-Mundo_files/figure-latex/GIBBS SAMPLER-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{pmf}\OperatorTok{$}\NormalTok{x,}\DataTypeTok{y=}\NormalTok{pmf}\OperatorTok{$}\NormalTok{vals, }\DataTypeTok{main=}\StringTok{'approximate pmf'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW3-Sol-Ariel-Mundo_files/figure-latex/GIBBS SAMPLER-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(s,}\DataTypeTok{freq=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{main=}\StringTok{'Histogram for s'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW3-Sol-Ariel-Mundo_files/figure-latex/GIBBS SAMPLER-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'posterior median of theta:'}\NormalTok{,}\KeywordTok{median}\NormalTok{(theta), }\StringTok{'MLE estimate'}\NormalTok{,s_}\DecValTok{1}\OperatorTok{/}\NormalTok{n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "posterior median of theta: 0.230158313795905 MLE estimate 0.216216216216216"
+\end{verbatim}
+
+\begin{blue}
+
+\emph{The estimated posterior mean of} \(\theta\) \emph{is indeed to the
+maximum likelihood estimate of s/n .}
+
+\end{blue}
+
+\url{http://www.stat.cmu.edu/~brian/463-663/week10/Chapter\%2004.pdf}
+\url{https://bookdown.org/rdpeng/advstatcomp/gibbs-sampler.html}
+
+\hypertarget{part-5-of-problem-1}{%
+\subsubsection{PART 5 OF PROBLEM 1}\label{part-5-of-problem-1}}
+
+This section measures the sensitivity of the posterior median to the
+choice of initial values. For this part, the previous Gibbs sampler will
+be transformed in a function, and the initial ratio \(s/n\) will be
+randomized and the median \(s\) and \(\theta\) will be plotted for all
+iterations.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{binomial_beta_gibbs<-}\ControlFlowTok{function}\NormalTok{(theta_init,s_init,iterations)\{}
+\NormalTok{alpha=}\DecValTok{2}
+\NormalTok{beta_o=}\FloatTok{6.4}
+\NormalTok{n=}\DecValTok{74}
+\NormalTok{  theta_init=s_}\DecValTok{1}\OperatorTok{/}\NormalTok{n}
+\NormalTok{s_init=s_}\DecValTok{1}\OperatorTok{/}\NormalTok{n}
+\NormalTok{  theta=}\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{,iterations)}
+\NormalTok{  s=}\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{,iterations)}
+\NormalTok{  theta[}\DecValTok{1}\NormalTok{] =}\StringTok{ }\NormalTok{theta_init}
+\NormalTok{  s[}\DecValTok{1}\NormalTok{]=s_init}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{iterations)\{}
+\NormalTok{    s[i] =}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DataTypeTok{size=}\NormalTok{n,}\DataTypeTok{prob=}\NormalTok{theta[i}\DecValTok{-1}\NormalTok{]) }\CommentTok{#conditional for s}
+\NormalTok{    theta[i] =}\StringTok{ }\KeywordTok{rbeta}\NormalTok{(}\DecValTok{1}\NormalTok{,alpha}\OperatorTok{+}\NormalTok{s[i],beta_o}\OperatorTok{+}\NormalTok{n}\OperatorTok{-}\NormalTok{s[i]) }\CommentTok{#conditional for theta}
+\NormalTok{  \}}
+\NormalTok{  pmf<-}\KeywordTok{count}\NormalTok{(s)}
+\NormalTok{  pmf}\OperatorTok{$}\NormalTok{vals<-pmf}\OperatorTok{$}\NormalTok{freq}\OperatorTok{/}\NormalTok{niter}
+ \KeywordTok{return}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(}\KeywordTok{median}\NormalTok{(s),}\KeywordTok{median}\NormalTok{(theta)))}
+\NormalTok{\}}
+\CommentTok{#v<-seq(0,10,0.1)}
+\NormalTok{v<-}\KeywordTok{runif}\NormalTok{(}\DecValTok{1000}\NormalTok{)}
+\NormalTok{test<-}\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\DecValTok{2}\NormalTok{,}\KeywordTok{length}\NormalTok{(v))}
+\ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(v))\{}
+\NormalTok{test[,j]<-}\KeywordTok{binomial_beta_gibbs}\NormalTok{(v[j],v[j],}\DecValTok{1000}\NormalTok{)}
+\NormalTok{\}}
+\KeywordTok{plot}\NormalTok{(test[}\DecValTok{2}\NormalTok{,], }\DataTypeTok{type=}\StringTok{'l'}\NormalTok{, }\DataTypeTok{xlab=}\StringTok{'iteration'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'median theta from variable initial values'}\NormalTok{) }\CommentTok{#plotting the median values of all iterations}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW3-Sol-Ariel-Mundo_files/figure-latex/PROBLEM 1 PART 5-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(test[}\DecValTok{1}\NormalTok{,], }\DataTypeTok{type=}\StringTok{'l'}\NormalTok{, }\DataTypeTok{xlab=}\StringTok{'iteration'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'median s from variable initial values'}\NormalTok{) }\CommentTok{#plotting the median values of all iterations}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW3-Sol-Ariel-Mundo_files/figure-latex/PROBLEM 1 PART 5-2.pdf}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{problem-2}{%
+\subsubsection{PROBLEM 2}\label{problem-2}}
+
+The pmf in this case is the result of the combination of each individual
+distribution:
+
+\({n\choose s} \theta^{s}(1-\theta)^{n-s} \frac{\Gamma(\alpha_0+\beta_0)}{\Gamma(\alpha_0)\Gamma(\beta_0)}\theta^{\alpha_0-1}(1-\theta)^{\beta_0-1}\left[\frac{\exp(-\lambda)\lambda^{n}}{n!})\right]\)
+
+This can be re-written as:
+\(\frac{n!}{s!(n-s!)}\theta^{s}(1-\theta)^{n-s} \frac{\Gamma(\alpha_0+\beta_0)}{\Gamma(\alpha_0)\Gamma(\beta_0)}\theta^{\alpha_0-1}(1-\theta)^{\beta_0-1}\left[\frac{\exp(-\lambda)\lambda^{n}}{n!})\right]\)
+
+For
+\(\theta \vert s,n \propto \theta^{\alpha_0+s-1}(1-\theta)^{n-s+\beta_0-1} \propto Beta(\alpha_0+s,n-s+\beta_0)\)
+
+For
+\(s \vert \theta,n \propto {n\choose s} \theta^{s}(1-\theta)^{n-s} \propto Binomial (n,\theta)\)
+
+Therefore the two terms \(n!\) cancel out and the exponential can be
+taken out as it is a constant.
+
+Writing the conditional distribution of \(n\) by considering only the
+terms that include it and omitting constant terms:
+\(f(n\vert\theta,s) \propto \frac{\lambda^{n}(1-\theta)^{n-s}}{(n-s)!}\)
+
+Which, considering a constant \(\exp (-\lambda(1-\theta))\) means that
+\((n-s) \propto Poisson(\lambda(1-\theta))\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n_}\DecValTok{1}\NormalTok{=}\DecValTok{74}
+\NormalTok{binomial_beta_gibbs_poisson<-}\ControlFlowTok{function}\NormalTok{(n_init,theta_init,s_init,iterations)\{}
+\NormalTok{alpha=}\DecValTok{2}
+\NormalTok{beta_o=}\FloatTok{6.4}
+\NormalTok{lambda=}\DecValTok{64}
+\NormalTok{  theta_bgp=}\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{,iterations)}
+\NormalTok{  s_bgp=}\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{,iterations)}
+\NormalTok{  n_bgp=}\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{,iterations)}
+\NormalTok{    theta_bgp[}\DecValTok{1}\NormalTok{] =}\StringTok{ }\NormalTok{theta_init}
+\NormalTok{    s_bgp[}\DecValTok{1}\NormalTok{]=s_init}
+\NormalTok{    n_bgp[}\DecValTok{1}\NormalTok{]=n_init}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{iterations)\{}
+\NormalTok{    s_bgp[i] =}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DataTypeTok{size=}\NormalTok{n_bgp[i}\DecValTok{-1}\NormalTok{],}\DataTypeTok{prob=}\NormalTok{theta_bgp[i}\DecValTok{-1}\NormalTok{])}
+\NormalTok{    theta_bgp[i] =}\StringTok{ }\KeywordTok{rbeta}\NormalTok{(}\DecValTok{1}\NormalTok{,alpha}\OperatorTok{+}\NormalTok{s_bgp[i],beta_o}\OperatorTok{+}\NormalTok{n_bgp[i}\DecValTok{-1}\NormalTok{]}\OperatorTok{-}\NormalTok{s_bgp[i])}
+\NormalTok{    n_bgp[i]=s_bgp[i]}\OperatorTok{+}\KeywordTok{rpois}\NormalTok{(}\DecValTok{1}\NormalTok{,lambda}\OperatorTok{*}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{theta_bgp[i])) }\CommentTok{#conditional for n}
+\NormalTok{  \}}
+  \CommentTok{#pmf<-count(s)}
+  \CommentTok{#pmf$vals<-pmf$freq/niter}
+ \KeywordTok{return}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(s_bgp,theta_bgp,n_bgp))}
+\NormalTok{\}}
+
+\NormalTok{test2<-}\KeywordTok{binomial_beta_gibbs_poisson}\NormalTok{(}\DecValTok{10}\NormalTok{,s_}\DecValTok{1}\OperatorTok{/}\NormalTok{n_}\DecValTok{1}\NormalTok{,s_}\DecValTok{1}\OperatorTok{/}\NormalTok{n_}\DecValTok{1}\NormalTok{,}\DecValTok{1000}\NormalTok{)}
+\KeywordTok{hist}\NormalTok{(test2[,}\DecValTok{1}\NormalTok{],}\DataTypeTok{freq=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{main=}\StringTok{'Histogram of s'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW3-Sol-Ariel-Mundo_files/figure-latex/PROBLEM 2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'Median theta of Binomial-Beta-Poisson'}\NormalTok{,}\KeywordTok{median}\NormalTok{(test2[,}\DecValTok{2}\NormalTok{]),}\StringTok{'The posterior median is similar to the method of problem 1'}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Median theta of Binomial-Beta-Poisson 0.227290381804581 The posterior median is similar to the method of problem 1"
+\end{verbatim}
+
+Regarding convergence, plotting the traceplot for \(s\) and \(\theta\):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(test2[,}\DecValTok{1}\NormalTok{], }\DataTypeTok{type=}\StringTok{'l'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'traceplot for s'}\NormalTok{, }\DataTypeTok{xlab=}\StringTok{'iterations'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW3-Sol-Ariel-Mundo_files/figure-latex/PROBLEM 2, 3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(test2[,}\DecValTok{2}\NormalTok{], }\DataTypeTok{type=}\StringTok{'l'}\NormalTok{,}\DataTypeTok{main=}\StringTok{'traceplot for theta'}\NormalTok{, }\DataTypeTok{xlab=}\StringTok{'iterations'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW3-Sol-Ariel-Mundo_files/figure-latex/PROBLEM 2, 3-2.pdf}
+
+\end{document}
