@@ -3,21 +3,21 @@ title: STAT 5443, HW3
 author: Ariel Mundo
 date: "`r Sys.Date()`"
 output:
+    prettydoc::html_pretty:
     pdf_document: 
-    html_document: default
-    #theme: cayman
-    #css: styles.css
+    theme: cayman
+    css: styles.css
 ---
 <style type="text/css">
 
 p {
-   font-size: 14px;
+   font-size: 18px;
 }
 code.r{
   font-size: 14px;
 }
 pre {
-  font-size: 14px
+  font-size: 18px
 }
 </style>
 
@@ -32,7 +32,7 @@ library(prettydoc)
 ### GIBBS SAMPLER
 
 This section contains parts 1-4 from PROBLEM 1.
-```{r, GIBBS SAMPLER}
+```{r, GIBBS SAMPLER, warning=FALSE}
 library(plyr)
 rm(list = ls())
 set.seed(123)
@@ -53,24 +53,31 @@ s_init=s_1/n
   }
   pmf<-count(s)
   pmf$vals<-pmf$freq/niter
-  
+ 
+```
+
+```{r, FIG 1, fig.cap="Fig.1 Traceplot for theta"}
 plot(theta,type="l", main='Traceplot for theta',xlab='iterations')
+```
+```{r, FIG 2, fig.cap="Fig.2 Traceplot for s"}
 plot(s,type="l", main='Traceplot for s',xlab='iterations')
+```
+
+```{r, FIG 3, fig.cap="Fig.3 Approximate pmf"}
 plot(x=pmf$x,y=pmf$vals, main='approximate pmf')
-hist(s,freq=FALSE, main='Histogram for s')
+```
+```{r, FIG 4, fig.cap="Barplot of s"}
+hist(s,freq=FALSE, main='Barplot for s')
 print(paste('posterior median of theta:',median(theta), 'MLE estimate',s_1/n))
 ```
-<div class = "blue">
- *The estimated posterior mean of* $\theta$ *is indeed to the maximum likelihood estimate of s/n .*
-</div>
-http://www.stat.cmu.edu/~brian/463-663/week10/Chapter%2004.pdf
-https://bookdown.org/rdpeng/advstatcomp/gibbs-sampler.html
 
+**_The estimated posterior mean of $\theta$ is indeed close to the maximum likelihood estimate of s/n._**
+ 
 ### PART 5 OF PROBLEM 1
 
 This section measures the sensitivity of the posterior median to the choice of initial values. For this part, the previous Gibbs sampler will be transformed in a function, and the initial ratio $s/n$ will be randomized and the median $s$ and $\theta$ will be plotted for all iterations.
 
-```{r, PROBLEM 1 PART 5}
+```{r, PROBLEM 1 PART 5a, fig.cap="Traceplot of median theta using random values"}
 
 binomial_beta_gibbs<-function(theta_init,s_init,iterations){
 alpha=2
@@ -96,10 +103,22 @@ test<-matrix(NA,2,length(v))
 for (j in 1:length(v)){
 test[,j]<-binomial_beta_gibbs(v[j],v[j],1000)
 }
+```
+
+```{r, FIG 5, fig.cap="Fig.5 Median theta from variable initial values"}
+
 plot(test[2,], type='l', xlab='iteration',main='median theta from variable initial values') #plotting the median values of all iterations
+```
+
+
+```{r, FIG 6, fig.cap="Fig. 6 Traceplot for median s from variable initial values"}
+
+
 plot(test[1,], type='l', xlab='iteration',main='median s from variable initial values') #plotting the median values of all iterations
 
 ```
+
+**_Based on these results, the posterior median is relatively insensitive to the choice of initial values, as a randomization of the initial values for theta and s (based on the traceplots) results in a posterior  median of theta that is close to the posterior estimated in problem 1._**
 
 ***
 
@@ -126,9 +145,6 @@ Which, considering a constant $\exp (-\lambda(1-\theta))$ means that $(n-s) \pro
 
 
 
-
-
-
 ```{r, PROBLEM 2}
 n_1=74
 binomial_beta_gibbs_poisson<-function(n_init,theta_init,s_init,iterations){
@@ -148,17 +164,24 @@ lambda=64
   }
   #pmf<-count(s)
   #pmf$vals<-pmf$freq/niter
- return(cbind(s_bgp,theta_bgp,n_bgp))
+ return(cbind(s_bgp,theta_bgp,n_bgp)) #storing the values
 }
 
 test2<-binomial_beta_gibbs_poisson(10,s_1/n_1,s_1/n_1,1000)
-hist(test2[,1],freq=FALSE, main='Histogram of s')
+
+```
+```{r, FIG 7, fig.cap="Fig.7 Barplot of s"}
+hist(test2[,1],freq=FALSE, main='Barplot of s')
 print(paste('Median theta of Binomial-Beta-Poisson',median(test2[,2]),'The posterior median is similar to the method of problem 1'))
 ```
 Regarding convergence, plotting the traceplot for $s$ and $\theta$:
 
-```{r, PROBLEM 2, 3}
+```{r, FIG 8, fig.cap="Fig.8 Traceplot for s"}
 plot(test2[,1], type='l',main='traceplot for s', xlab='iterations')
-plot(test2[,2], type='l',main='traceplot for theta', xlab='iterations')
 ```
 
+```{r, FIG 9, fig.cap="Fig.9 Traceplot for theta"}
+plot(test2[,2], type='l',main='traceplot for theta', xlab='iterations')
+``` 
+
+**_This indicates that the convergence is similar to the values from problem 1, as the traceplots show a similar range of values in both cases_. (Figs. 1,2,8,9)**
