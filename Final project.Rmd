@@ -28,4 +28,21 @@ pre {
 library(prettydoc)
 ```
 
+Library hdrm was installed following the directions from:
+https://github.com/pbreheny/hdrm
+
+
+```{r, LOAD PACKAGE}
+installed_flag = F
+
+if(installed_flag == F){
+  if(!require(remotes)){
+  install.packages("remotes", dependencies = TRUE, repos = 'http://cran.rstudio.com')
+ }
+remotes::install_github("pbreheny/hdrm")
+}
+
+#installation done, code in lines above will be commented
+
+```
 
