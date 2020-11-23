@@ -1,0 +1,31 @@
+---
+title: STAT 5443, FINAL PROJECT
+author: Ariel Mundo
+date: "`r Sys.Date()`"
+output:
+    prettydoc::html_pretty:
+    pdf_document: 
+    theme: cayman
+    css: styles.css
+---
+<style type="text/css">
+
+p {
+   font-size: 18px;
+}
+code.r{
+  font-size: 14px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+
+
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+library(prettydoc)
+```
+
+
