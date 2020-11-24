@@ -32,17 +32,28 @@ Library hdrm was installed following the directions from:
 https://github.com/pbreheny/hdrm
 
 
-```{r, LOAD PACKAGE}
-installed_flag = F
+```{r, loading data}
 
-if(installed_flag == F){
-  if(!require(remotes)){
-  install.packages("remotes", dependencies = TRUE, repos = 'http://cran.rstudio.com')
- }
-remotes::install_github("pbreheny/hdrm")
-}
+library(hdrm)
+downloadData(Golub1999)
+attachData(Golub1999)
+```
+http://www.sthda.com/english/articles/36-classification-methods-essentials/149-penalized-logistic-regression-essentials-in-r-ridge-lasso-and-elastic-net/#computing-penalized-logistic-regression
+```{r, running analysis}
+n=nrow(X)
 
-#installation done, code in lines above will be commented
+#split in train and test sets
+
+train_rows <- sample(1:n, n/2)
+X.train <- X[train_rows, ]
+X.test <- X[-train_rows, ]
+
+y.train <- y[train_rows]
+y.test <- y[-train_rows]
+
+grid=10^seq(10,-2,length=100)
+lasso.mod =glmnet (X.train, y.train, alpha = 1, lambda = grid)
+plot(lasso.mod)
 
 ```
 
