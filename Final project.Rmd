@@ -86,15 +86,24 @@ plot(fit.elastic_net, main="Elastic net")
 plot(fit.lasso, main="Lasso")
 plot(fit.ridge, main="Ridge")
 par(mfrow=c(1,1))
-#Fitting the models to the training data
 
+#Fitting the models to the training data
 
 mod.enet<-glmnet(X.train,y.train,alpha=0.5,family = "binomial",lambda=fit.elastic_net$lambda.min)
 mod.lasso<-glmnet(X.train,y.train,alpha=1,family = "binomial",lambda=fit.lasso$lambda.min)
 mod.ridge<-glmnet(X.train,y.train,alpha=0,family = "binomial",lambda=fit.ridge$lambda.min)
 
-#Predictions on test data
-enet<-
+#Predictions on training data
+prob.enet<-mod.enet %>%predict(newx=X.test)
+prob.lasso<-mod.lasso %>%predict(newx=X.test)
+prob.ridge<-mod.ridge %>%predict(newx=X.test)
 
+pred.class.enet<-ifelse(prob.enet>0.5,"AML","ALL")
+pred.class.lasso<-ifelse(prob.lasso>0.5,"AML","ALL")
+pred.class.ridge<-ifelse(prob.ridge>0.5,"AML","ALL")
+#Accuracy
+mean(pred.class.enet==y.test)
+mean(pred.class.lasso==y.test)
+mean(pred.class.ridge==y.test)
 ```
 
