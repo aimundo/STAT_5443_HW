@@ -47,7 +47,7 @@ http://www.sthda.com/english/articles/36-classification-methods-essentials/149-p
 
 
 
-```{r, running analysis}
+```{r, splitting the data}
 n=nrow(X)
 
 #split in train and test sets
@@ -61,7 +61,7 @@ y.test <- y[-train_rows]
 
 ```
 
-```{r,logistic}
+```{r,Cl}
 
 logistic_l1<-glmnet(x=X.train,y=y.train,family = "binomial")
 plot(logistic_l1)
@@ -71,30 +71,27 @@ plot(lasso.mod)
 
 ```
 https://daviddalpiaz.github.io/stat432sp18/hw/hw07-soln.html
+https://stackoverflow.com/questions/20572919/finding-misclassification-rate-in-r-loan-default
 
-```{r, ELASTIC NET}
-nfolds <- 10                    # Number of cross-validation folds.
-alpha  <- 0.95                  # Elastic net mixing parameter.
-lambda <- 10^(seq(0,-2,-0.05))  # Lambda sequence.
-
-#model fitting
-elastic_net<-glmnet(X.train,y.train,family="binomial",lambda=lambda,alpha=alpha)
+```{r, ELASTIC NET, LASSO AND RIDGE}
 #cross validation
-out<-cv.glmnet(X.train,y.train,family="binomial",type.measure = "class",alpha=alpha,nfolds=nfolds,lambda=lambda)
 
-lambda1<-out$lambda
+alpha=0.5
+#Using cross validation for best lambda in all models
+fit.elastic_net<-cv.glmnet(X.train,y.train,family="binomial",type.measure = "class",alpha=alpha)
+fit.lasso<-cv.glmnet(X.train,y.train,family="binomial",type.measure = "class",alpha=1)
+fit.ridge<-cv.glmnet(X.train,y.train,family="binomial",type.measure = "class",alpha=0)
+par(mfrow=c(2,2))
+plot(fit.elastic_net, main="Elastic net")
+plot(fit.lasso, main="Lasso")
+plot(fit.ridge, main="Ridge")
+
+#Fitting the models to the training data
+
+
+mod.enet<-glmnet(X.train,y.train,alpha=0.5,family = "binomial",lambda=fit.elastic_net$lambda.min)
+mod.lasso<-glmnet(X.train,y.train,alpha=1,family = "binomial",lambda=fit.lasso$lambda.min)
+mod.ridge<-glmnet(X.train,y.train,alpha=0,family = "binomial",lambda=fit.ridge$lambda.min)
 
 ```
 
-```{r,LASSO}
-leukemia_lasso<-glmnet(x=X.train,y=y.train,family="binomial",alpha=1)
-fit_lasso<-cv.glmnet(X.train,y.train,family="binomial",alpha=1,nfolds=10)
-plot(leukemia_lasso,xvar='lambda', main="lasso")
-plot(fit_lasso)
-lambda_lasso<-expand.grid(alpha=1,lambda=c(fit_lasso$lambda.min,fit_lasso$lambda.1se))
-```
-
-```{r,RIDGE}
-leukemia_ridge<-glmnet(x=X.train,y=y.train,family="binomial",alpha=0)
-plot(leukemia_ridge,xvar='lambda', main="Ridge")
-```
