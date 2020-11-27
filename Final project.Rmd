@@ -51,7 +51,7 @@ http://www.sthda.com/english/articles/36-classification-methods-essentials/149-p
 n=nrow(X)
 
 #split in train and test sets
-
+set.seed(1234)
 train_rows <- sample(1:n, n/2)
 X.train <- X[train_rows, ]
 X.test <- X[-train_rows, ]
@@ -85,13 +85,16 @@ par(mfrow=c(2,2))
 plot(fit.elastic_net, main="Elastic net")
 plot(fit.lasso, main="Lasso")
 plot(fit.ridge, main="Ridge")
-
+par(mfrow=c(1,1))
 #Fitting the models to the training data
 
 
 mod.enet<-glmnet(X.train,y.train,alpha=0.5,family = "binomial",lambda=fit.elastic_net$lambda.min)
 mod.lasso<-glmnet(X.train,y.train,alpha=1,family = "binomial",lambda=fit.lasso$lambda.min)
 mod.ridge<-glmnet(X.train,y.train,alpha=0,family = "binomial",lambda=fit.ridge$lambda.min)
+
+#Predictions on test data
+enet<-
 
 ```
 
