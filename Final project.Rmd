@@ -40,6 +40,8 @@ https://github.com/pbreheny/hdrm
 
 library(hdrm)
 library(glmnet)
+library(ggplot2)
+library(tidyverse)
 downloadData(Golub1999)
 attachData(Golub1999)
 ```
@@ -98,12 +100,25 @@ coef.enet<-as.factor(rownames(coef(mod.enet, s = 'lambda.min'))[coef(mod.enet, s
 coef.lasso<-as.factor(rownames(coef(mod.lasso, s = 'lambda.min'))[coef(mod.lasso, s = 'lambda.min')[,1]!= 0])
 coef.ridge<-as.factor(rownames(coef(mod.ridge, s = 'lambda.min'))[coef(mod.ridge, s = 'lambda.min')[,1]!= 0])
 
+#Number of significant (non-zero) coefficients per model
+
+length(coef.enet)
+length(coef.lasso)
+length(coef.ridge)
+```
+
+LASSO has the lowest number of coefficients (17), followed by elastic net (32) and finally Ridge (7130).
+
+
+```{r,PREDICTIONS}
+
+
 #Predictions on training data
 prob.enet<-mod.enet %>%predict(newx=X.test)
 prob.lasso<-mod.lasso %>%predict(newx=X.test)
 prob.ridge<-mod.ridge %>%predict(newx=X.test)
 
-pred.class.enet<-ifelse(prob.enet>0.5,"AML","ALL")
+pred.class.enet<-ifelse(prob.enet>0.5,"ALL","AML")
 pred.class.lasso<-ifelse(prob.lasso>0.5,"AML","ALL")
 pred.class.ridge<-ifelse(prob.ridge>0.5,"AML","ALL")
 #Accuracy
