@@ -93,6 +93,11 @@ mod.enet<-glmnet(X.train,y.train,alpha=0.5,family = "binomial",lambda=fit.elasti
 mod.lasso<-glmnet(X.train,y.train,alpha=1,family = "binomial",lambda=fit.lasso$lambda.min)
 mod.ridge<-glmnet(X.train,y.train,alpha=0,family = "binomial",lambda=fit.ridge$lambda.min)
 
+#Extracting non-zero coefficients for each model
+coef.enet<-as.factor(rownames(coef(mod.enet, s = 'lambda.min'))[coef(mod.enet, s = 'lambda.min')[,1]!= 0])
+coef.lasso<-as.factor(rownames(coef(mod.lasso, s = 'lambda.min'))[coef(mod.lasso, s = 'lambda.min')[,1]!= 0])
+coef.ridge<-as.factor(rownames(coef(mod.ridge, s = 'lambda.min'))[coef(mod.ridge, s = 'lambda.min')[,1]!= 0])
+
 #Predictions on training data
 prob.enet<-mod.enet %>%predict(newx=X.test)
 prob.lasso<-mod.lasso %>%predict(newx=X.test)
