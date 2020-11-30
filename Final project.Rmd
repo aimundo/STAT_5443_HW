@@ -100,7 +100,8 @@ coef.enet<-as.factor(rownames(coef(mod.enet, s = 'lambda.min'))[coef(mod.enet, s
 coef.lasso<-as.factor(rownames(coef(mod.lasso, s = 'lambda.min'))[coef(mod.lasso, s = 'lambda.min')[,1]!= 0])
 coef.ridge<-as.factor(rownames(coef(mod.ridge, s = 'lambda.min'))[coef(mod.ridge, s = 'lambda.min')[,1]!= 0])
 
-#Number of significant (non-zero) coefficients per model
+#Number of significant (non-zero) coefficients per model for the training set
+
 
 length(coef.enet)
 length(coef.lasso)
@@ -114,16 +115,34 @@ LASSO has the lowest number of coefficients (17), followed by elastic net (32) a
 
 
 #Predictions on training data
-prob.enet<-mod.enet %>%predict(newx=X.test)
-prob.lasso<-mod.lasso %>%predict(newx=X.test)
-prob.ridge<-mod.ridge %>%predict(newx=X.test)
+prob.enet<-mod.enet %>% predict(newx=X.test,s=fit.elastic_net$lambda.min,type="response")
+prob.lasso<-mod.lasso %>% predict(newx=X.test,s=fit.lasso$lambda.min,type="response")
+prob.ridge<-mod.ridge %>% predict(newx=X.test,s=fit.ridge$lambda.min,type="response")
 
-pred.class.enet<-ifelse(prob.enet>0.5,"ALL","AML")
+contrasts(y)
+
+#because from the contrast matrix level 0 is ALL and level 1 is AML, the probabilities will be recoded accordingly. The predictions with probability above 0.5 will be considered AML and if below 0.5 will be considered ALL.
+pred.class.enet<-ifelse(prob.enet>0.5,"AML","ALL")
 pred.class.lasso<-ifelse(prob.lasso>0.5,"AML","ALL")
 pred.class.ridge<-ifelse(prob.ridge>0.5,"AML","ALL")
+
+
+confusionMatrix(data=as.factor(pred.class.enet),reference=y.test)
+confusionMatrix(data=as.factor(pred.class.lasso),reference=y.test)
+confusionMatrix(data=as.factor(pred.class.ridge),reference=y.test)
+
+table(y.test,pred.class.enet)
+table(y.test,pred.class.lasso)
+table(y.test,pred.class.ridge)
+#pred.class.enet<-ifelse(prob.enet>0.5,"ALL","AML")
+#pred.class.lasso<-ifelse(prob.lasso>0.5,"AML","ALL")
+#pred.class.ridge<-ifelse(prob.ridge>0.5,"AML","ALL")
+
 #Accuracy
-mean(pred.class.enet==y.test)
-mean(pred.class.lasso==y.test)
-mean(pred.class.ridge==y.test)
+
+
+#mean(pred.class.enet==y.test)
+#mean(pred.class.lasso==y.test)
+#mean(pred.class.ridge==y.test)
 ```
 
