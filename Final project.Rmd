@@ -127,7 +127,12 @@ ggplot(coef.ridge_sorted,aes(x=coefs,y=reorder(features,coefs)))+geom_point(size
 #coefplot(fit.elastic_net,lambda='lambda.min',sort="magnitude")
 #coefplot(fit.lasso,lambda='lambda.min',sort="magnitude")
 #coefplot(fit.ridge,lambda='lambda.min',sort="magnitude")
+
+a<-intersect(coef.ridge$features,coef.enet$features) #finding common coefficients between models
+> intersect(a,coef.lasso$features)
 ```
+
+It is interesting to note that non-zero factors between Elastic Net and LASSO follow roughly the same order, but that is not the case for Ridge.
 
 ```{r,FITTING MODELS TO DATA}
 
