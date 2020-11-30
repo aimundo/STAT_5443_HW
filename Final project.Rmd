@@ -42,6 +42,7 @@ library(hdrm)
 library(glmnet)
 library(ggplot2)
 library(tidyverse)
+library(coefplot)
 downloadData(Golub1999)
 attachData(Golub1999)
 ```
@@ -63,15 +64,7 @@ y.test <- y[-train_rows]
 
 ```
 
-```{r,Cl}
 
-logistic_l1<-glmnet(x=X.train,y=y.train,family = "binomial")
-plot(logistic_l1)
- grid=10^seq(10,-2,length=100)
-lasso.mod =glmnet (X.train, y.train, alpha = 1, lambda = grid)
-plot(lasso.mod)
-
-```
 https://daviddalpiaz.github.io/stat432sp18/hw/hw07-soln.html
 https://stackoverflow.com/questions/20572919/finding-misclassification-rate-in-r-loan-default
 
@@ -89,16 +82,62 @@ plot(fit.lasso, main="Lasso")
 plot(fit.ridge, main="Ridge")
 par(mfrow=c(1,1))
 
+#Solution paths
+par(mfrow=c(2,2))
+plot(fit.elastic_net$glmnet.fit,xvar="lambda", main="Elastic net")
+plot(fit.lasso$glmnet.fit,xvar="lambda",main="LASSO")
+plot(fit.ridge$glmnet.fit,xvar="lambda",main="Ridge")
+
+```
+
+The solution paths are very crowded for the elastic net and ridge regression. Non-zero coefficients will be extracted and sorted in descending order.
+
+```{r,COEFFICIENT PLOTS}
+#making dataframes from the non-zero coefficients
+coef.enet<-coef(fit.elastic_net,s="lambda.min")
+coef.enet <- data.frame(
+  features = coef.enet@Dimnames[[1]][ which(coef.enet != 0 ) ], 
+  coefs    = coef.enet              [ which(coef.enet != 0 ) ]  
+)
+
+coef.lasso<-coef(fit.lasso,s="lambda.min")
+coef.lasso <- data.frame(
+  features = coef.lasso@Dimnames[[1]][ which(coef.lasso != 0 ) ], 
+  coefs    = coef.lasso              [ which(coef.lasso != 0 ) ]  
+)
+
+coef.ridge<-coef(fit.ridge,s="lambda.min")
+coef.ridge <- data.frame(
+  features = coef.ridge@Dimnames[[1]][ which(coef.ridge != 0 ) ], 
+  coefs    = coef.ridge              [ which(coef.ridge != 0 ) ]  
+)
+
+#Sorting in decreasing order
+
+#Because the number of coefficients for Ridge Regression is too high (~7130) only the first 50 will be used for plotting purposes.
+coef.ridge_sorted<-coef.ridge %>% arrange(-coefs)
+coef.ridge_sorted<-coef.ridge_sorted[1:30,]
+
+
+#making plots with values in descending order
+
+ggplot(coef.enet,aes(x=coefs,y=reorder(features,coefs)))+geom_point(size=2)+ggtitle('Elastic Net factors')
+ggplot(coef.lasso,aes(x=coefs,y=reorder(features,coefs)))+geom_point(size=2)+ggtitle('LASSO factors')
+ggplot(coef.ridge_sorted,aes(x=coefs,y=reorder(features,coefs)))+geom_point(size=2)+ggtitle('Ridge factors')
+#coefplot(fit.elastic_net,lambda='lambda.min',sort="magnitude")
+#coefplot(fit.lasso,lambda='lambda.min',sort="magnitude")
+#coefplot(fit.ridge,lambda='lambda.min',sort="magnitude")
+```
+
+```{r,FITTING MODELS TO DATA}
+
+
 #Fitting the models to the training data
 
 mod.enet<-glmnet(X.train,y.train,alpha=0.5,family = "binomial",lambda=fit.elastic_net$lambda.min)
 mod.lasso<-glmnet(X.train,y.train,alpha=1,family = "binomial",lambda=fit.lasso$lambda.min)
 mod.ridge<-glmnet(X.train,y.train,alpha=0,family = "binomial",lambda=fit.ridge$lambda.min)
 
-#Extracting non-zero coefficients for each model
-coef.enet<-as.factor(rownames(coef(mod.enet, s = 'lambda.min'))[coef(mod.enet, s = 'lambda.min')[,1]!= 0])
-coef.lasso<-as.factor(rownames(coef(mod.lasso, s = 'lambda.min'))[coef(mod.lasso, s = 'lambda.min')[,1]!= 0])
-coef.ridge<-as.factor(rownames(coef(mod.ridge, s = 'lambda.min'))[coef(mod.ridge, s = 'lambda.min')[,1]!= 0])
 
 #Number of significant (non-zero) coefficients per model for the training set
 
@@ -110,6 +149,7 @@ length(coef.ridge)
 
 LASSO has the lowest number of coefficients (17), followed by elastic net (32) and finally Ridge (7130).
 
+The predictions will be made using the package <code>caret</code>
 
 ```{r,PREDICTIONS}
 
@@ -138,11 +178,10 @@ table(y.test,pred.class.ridge)
 #pred.class.lasso<-ifelse(prob.lasso>0.5,"AML","ALL")
 #pred.class.ridge<-ifelse(prob.ridge>0.5,"AML","ALL")
 
-#Accuracy
+#Misclassification error
 
-
-#mean(pred.class.enet==y.test)
-#mean(pred.class.lasso==y.test)
-#mean(pred.class.ridge==y.test)
+1-mean(pred.class.enet==y.test)
+1-mean(pred.class.lasso==y.test)
+1-mean(pred.class.ridge==y.test)
 ```
 
