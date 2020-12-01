@@ -42,12 +42,10 @@ library(hdrm)
 library(glmnet)
 library(ggplot2)
 library(tidyverse)
-library(coefplot)
+library(caret)
 downloadData(Golub1999)
 attachData(Golub1999)
 ```
-http://www.sthda.com/english/articles/36-classification-methods-essentials/149-penalized-logistic-regression-essentials-in-r-ridge-lasso-and-elastic-net/#computing-penalized-logistic-regression
-
 
 
 ```{r, splitting the data}
@@ -64,9 +62,6 @@ y.test <- y[-train_rows]
 
 ```
 
-
-https://daviddalpiaz.github.io/stat432sp18/hw/hw07-soln.html
-https://stackoverflow.com/questions/20572919/finding-misclassification-rate-in-r-loan-default
 
 ```{r, ELASTIC NET, LASSO AND RIDGE}
 #cross validation
@@ -90,7 +85,7 @@ plot(fit.ridge$glmnet.fit,xvar="lambda",main="Ridge")
 
 ```
 
-The solution paths are very crowded for the elastic net and ridge regression. Non-zero coefficients will be extracted and sorted in descending order.
+The solution paths are very crowded for the elastic net and ridge regression. Non-zero coefficients will be extracted and sorted in descending order.Because the number of coefficients for Ridge Regression is too high (~7130) only the first 50 will be used for plotting purposes.
 
 ```{r,COEFFICIENT PLOTS}
 #making dataframes from the non-zero coefficients
@@ -129,10 +124,10 @@ ggplot(coef.ridge_sorted,aes(x=coefs,y=reorder(features,coefs)))+geom_point(size
 #coefplot(fit.ridge,lambda='lambda.min',sort="magnitude")
 
 a<-intersect(coef.ridge$features,coef.enet$features) #finding common coefficients between models
-> intersect(a,coef.lasso$features)
+a<-intersect(a,coef.lasso$features)
 ```
 
-It is interesting to note that non-zero factors between Elastic Net and LASSO follow roughly the same order, but that is not the case for Ridge.
+It is interesting to note that non-zero factors between Elastic Net and LASSO follow roughly the same descending order, but that is not the case for Ridge. It can be seen that Elast Net uses 32 significant coefficients, LASSO uses 17 and Ridge uses 7130.
 
 ```{r,FITTING MODELS TO DATA}
 
@@ -147,14 +142,10 @@ mod.ridge<-glmnet(X.train,y.train,alpha=0,family = "binomial",lambda=fit.ridge$l
 #Number of significant (non-zero) coefficients per model for the training set
 
 
-length(coef.enet)
-length(coef.lasso)
-length(coef.ridge)
 ```
 
-LASSO has the lowest number of coefficients (17), followed by elastic net (32) and finally Ridge (7130).
 
-The predictions will be made using the package <code>caret</code>
+The predictions will be analyzed using the package <code>caret</code> for determining the Confusion Matrix and other statistical information of the predictions.
 
 ```{r,PREDICTIONS}
 
@@ -164,9 +155,11 @@ prob.enet<-mod.enet %>% predict(newx=X.test,s=fit.elastic_net$lambda.min,type="r
 prob.lasso<-mod.lasso %>% predict(newx=X.test,s=fit.lasso$lambda.min,type="response")
 prob.ridge<-mod.ridge %>% predict(newx=X.test,s=fit.ridge$lambda.min,type="response")
 
+#Because from the contrast matrix level 0 is ALL and level 1 is AML, the probabilities will be re-coded accordingly. The predictions with probability above 0.5 will be considered AML and if below 0.5 will be considered ALL.
+
 contrasts(y)
 
-#because from the contrast matrix level 0 is ALL and level 1 is AML, the probabilities will be recoded accordingly. The predictions with probability above 0.5 will be considered AML and if below 0.5 will be considered ALL.
+
 pred.class.enet<-ifelse(prob.enet>0.5,"AML","ALL")
 pred.class.lasso<-ifelse(prob.lasso>0.5,"AML","ALL")
 pred.class.ridge<-ifelse(prob.ridge>0.5,"AML","ALL")
@@ -176,9 +169,9 @@ confusionMatrix(data=as.factor(pred.class.enet),reference=y.test)
 confusionMatrix(data=as.factor(pred.class.lasso),reference=y.test)
 confusionMatrix(data=as.factor(pred.class.ridge),reference=y.test)
 
-table(y.test,pred.class.enet)
-table(y.test,pred.class.lasso)
-table(y.test,pred.class.ridge)
+#table(y.test,pred.class.enet)
+#table(y.test,pred.class.lasso)
+#table(y.test,pred.class.ridge)
 #pred.class.enet<-ifelse(prob.enet>0.5,"ALL","AML")
 #pred.class.lasso<-ifelse(prob.lasso>0.5,"AML","ALL")
 #pred.class.ridge<-ifelse(prob.ridge>0.5,"AML","ALL")
@@ -190,3 +183,55 @@ table(y.test,pred.class.ridge)
 1-mean(pred.class.ridge==y.test)
 ```
 
+The results are similar with either model regarding accuracy (94.4%) and misclassification error (5.5%). It is interesting to note that virtually the same results can be obtained 
+
+```{Comparing output from each model and test data}
+real<-as.data.frame(y.test)
+results<-cbind(pred.class.enet,pred.class.lasso,pred.class.ridge,real)
+names(results)[1]<-"Elastic_Net"
+names(results)[2]<-"LASSO"
+names(results)[3]<-"Ridge"
+names(results)[4]<-"Real_values"
+results$subject<-rownames(results) #adding the correct subject number to each classification
+view(results)
+```
+
+It can be seen that the Elastic Net and LASSO models misclassify observations 17 and 32. Patient/subject 17 is ALL but the models classify it as AML. Patient 32 is AML but is classified as ALL. The properly classified ALL and AML observations will be analyzed and compared with the misclassified results to determine the cause of the error.
+
+```{r,PLOTTING DATA}
+#Merging test data
+test_dataset<-as.data.frame(X.test)
+test_dataset<-cbind(results[,5],results[,4],test_dataset)
+names(test_dataset)[1]<-"Subject" #renaming the columns
+names(test_dataset)[2]<-"Class"
+
+#Reshaping data
+library(reshape)
+long<-melt(test_dataset,id=c("Subject","Class"))
+names(long)[3]<-"Gene" #renaming the columns
+names(long)[4]<-"Val"
+
+means<-long %>% group_by(Gene,Class) %>% #calculating mean values for each gene per class
+  summarise_at(vars(Val),funs(mean))
+
+#Getting mean values for the most significant genes per group
+sig_means<-means %>% filter(Gene %in% c("MGST1","KIT","M10612_at","APLP2","CD33","ZYX"))
+
+#extracting values for the missclasified subjects
+vals<-long %>% filter(Subject %in% c("17","32") & Gene %in%   c("MGST1","KIT","M10612_at","APLP2","CD33","ZYX"))
+
+
+g1<-ggplot(sig_means,aes(x=Val,y=Gene))+geom_point(color="Blue")+facet_wrap(~Class)+
+  ggtitle("Mean values of gene per group")
+
+g2<-ggplot(vals,aes(x=Val,y=Gene))+geom_point(color="red")+facet_wrap(~Subject)+
+  ggtitle("Values of gene per misclassified subject")
+
+
+library(ggpubr)
+
+#Plotting results together
+
+ggarrange(g1,g2,ncol=2,nrow=2)
+```
+Based on this analysis, it appears that the reason why subject 17 is misclassified as AML and subject 32 is misclassified as ALL is because the coefficients associated with the most important genes are closer to the mean values for the other class. It can be seen that the means for AML for the genes tend to be around 8 and up to about 12. The same spread pattern is seen in subject 17, although is classified as ALL. For subject 32 althought the data is more sparse it can be seen that the gene values are also below 9, similarly to the ALL group means, although subject 32 is classified as AML. 
