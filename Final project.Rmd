@@ -21,6 +21,7 @@ pre {
 }
 </style>
 
+#PART 1
 ## Sparse Classification 
 
 ### Comparing penalized methods for High-dimensional Classification
@@ -127,7 +128,7 @@ a<-intersect(coef.ridge$features,coef.enet$features) #finding common coefficient
 a<-intersect(a,coef.lasso$features)
 ```
 
-It is interesting to note that non-zero factors between Elastic Net and LASSO follow roughly the same descending order, but that is not the case for Ridge. It can be seen that Elast Net uses 32 significant coefficients, LASSO uses 17 and Ridge uses 7130.
+It is interesting to note that non-zero factors between Elastic Net and LASSO follow roughly the same descending order, but that is not the case for Ridge. It can be seen that Elastic Net uses 32 significant coefficients, LASSO uses 17 and Ridge uses 7130.
 
 ```{r,FITTING MODELS TO DATA}
 
@@ -234,4 +235,18 @@ library(ggpubr)
 
 ggarrange(g1,g2,ncol=2,nrow=2)
 ```
+
 Based on this analysis, it appears that the reason why subject 17 is misclassified as AML and subject 32 is misclassified as ALL is because the coefficients associated with the most important genes are closer to the mean values for the other class. It can be seen that the means for AML for the genes tend to be around 8 and up to about 12. The same spread pattern is seen in subject 17, although is classified as ALL. For subject 32 althought the data is more sparse it can be seen that the gene values are also below 9, similarly to the ALL group means, although subject 32 is classified as AML. 
+
+***
+
+
+#PART 2
+#LITERATURE REVIEW
+
+_Finding Online Extremists in Social Networks_
+
+Klausen et. al.
+https://arxiv.org/pdf/1610.06242.pdf
+
+
