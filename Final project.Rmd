@@ -249,4 +249,10 @@ _Finding Online Extremists in Social Networks_
 Klausen et. al.
 https://arxiv.org/pdf/1610.06242.pdf
 
+The paper by Klausen et al covers the use of machine learning algorithms to detect extremists on social media using behavioral and network features.The study collects large amounts of data from users from Twitter that have been identified that have some interaction with the extremist group ISIS (The Islamic State of Iraq and the Levant). The authors collected 1.3 million user profiles related to ISIS and their friends and followers, and 4.8 million tweets. Due to the large amount of collected data, it is clear that a machine learning approach is appropriate to analyze the data.
+
+The first model the authors build is to use logistic regression to predict account suspensions using a dataset of 5,000 accounts. The predictors in this case were network and account features including followed accounts known to belong to ISIS, date and time, geo-location and others. It seems interesting to me the use of mixed variables (binary and numeric) to fit a logistic model.Their results suggest that using a $\ell_1$ regularization the model can detect about 60% of the suspended users with a 10% false positivity rate. Misclassified accounts were identified as having few tweets or no posting content at all.
+
+The next model was developed to detect if two user profiles belong to the same user.The authors measured the distance between two strings to identify similarly named accounts.
+
 
