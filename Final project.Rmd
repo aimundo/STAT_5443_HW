@@ -22,10 +22,11 @@ pre {
 </style>
 
 
-#PART 1
+# PART 1
+
 ## Sparse Classification 
 
-###Comparing penalized methods for High-dimensional Classification
+### Comparing penalized methods for High-dimensional Classification
 
 We would like to compare the performance of several modern regression methods including penalized regression methods such as LASSO and Elastic Net regression with 10-fold cross-validation. 
 
@@ -241,8 +242,9 @@ Based on this analysis, it appears that the reason why subject 17 is misclassifi
 ***
 
 
-#PART 2
-#LITERATURE REVIEW
+# PART 2
+
+# LITERATURE REVIEW
 
 _Finding Online Extremists in Social Networks_
 
